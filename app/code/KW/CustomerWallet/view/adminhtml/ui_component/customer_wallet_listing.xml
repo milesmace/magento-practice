@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd"
+         name="customer_wallet_listing">
+
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">customer_wallet_listing.customer_wallet_listing_data_source</item>
+            <item name="deps" xsi:type="string">customer_wallet_listing.customer_wallet_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">customer_wallet_columns</item>
+    </argument>
+
+    <!-- Data Source -->
+    <dataSource name="customer_wallet_listing.customer_wallet_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render" />
+        </settings>
+        <aclResource>KW_CustomerWallet::wallet</aclResource>
+        <dataProvider class="KW\CustomerWallet\Ui\DataProvider\WalletDataProvider" name="customer_wallet_listing_data_source">
+            <settings>
+                <requestFieldName>wallet_id</requestFieldName>
+                <primaryFieldName>wallet_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <!-- Listing Toolbar -->
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks" />
+        <columnsControls name="column_controls" />
+        <filters name="listing_filters" />
+        <paging name="listing_paging" />
+    </listingToolbar>
+
+    <!-- Columns -->
+    <columns name="customer_wallet_columns">
+        <column name="wallet_id" sortOrder="0">
+            <settings>
+                <filter>textRange</filter>
+                <sortable>true</sortable>
+                <label>ID</label>
+            </settings>
+        </column>
+
+        <column name="customer_name" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <sortable>false</sortable>
+                <label>Customer Name</label>
+            </settings>
+        </column>
+
+        <column name="balance" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="100">
+            <settings>
+                <filter>range</filter>
+                <sortable>true</sortable>
+                <label>Balance</label>
+            </settings>
+        </column>
+
+        <actionsColumn name="actions" class="KW\CustomerWallet\Ui\Component\Listing\Column\Actions" sortOrder="200">
+            <settings>
+                <indexField>wallet_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

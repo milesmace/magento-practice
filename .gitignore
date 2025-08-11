@@ -1,0 +1,15 @@
+
+# editors
+.idea
+.vscode
+
+bin/
+dev/
+generated/
+lib/
+pub/
+phpserver/
+setup/
+var/
+vendor/
+

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="KW_CustomerWallet::customer_wallets" title="Wallets" translate="title" module="KW_CustomerWallet" sortOrder="100" parent="Magento_Customer::customer" action="customer/wallets/" resource="Magento_Customer::wallet"/>
+    </menu>
+</config>
