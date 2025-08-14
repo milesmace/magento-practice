@@ -69,6 +69,16 @@ class Wallet extends AbstractModel implements WalletInterface
         return $this->setData(self::BALANCE, $balance);
     }
 
+    public function getIsActive()
+    {
+        return (bool) $this->getData(self::IS_ACTIVE);
+    }
+
+    public function setIsActive($isActive)
+    {
+        return $this->setData(self::IS_ACTIVE, $isActive);
+    }
+
     public function getCreatedAt()
     {
         return $this->getData(self::CREATED_AT);

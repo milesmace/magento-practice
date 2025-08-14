@@ -15,7 +15,7 @@
     <dataSource name="customer_wallet_listing.customer_wallet_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
-                <param name="indexField" xsi:type="string">id</param>
+                <param name="indexField" xsi:type="string">wallet_id</param>
             </storageConfig>
             <updateUrl path="mui/index/render" />
         </settings>
@@ -23,7 +23,7 @@
         <dataProvider class="KW\CustomerWallet\Ui\DataProvider\WalletDataProvider" name="customer_wallet_listing_data_source">
             <settings>
                 <requestFieldName>wallet_id</requestFieldName>
-                <primaryFieldName>id</primaryFieldName>
+                <primaryFieldName>wallet_id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
@@ -57,11 +57,20 @@
             </settings>
         </column>
 
-        <column name="balance" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="100">
+        <column name="balance" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="90">
             <settings>
                 <filter>range</filter>
                 <sortable>true</sortable>
                 <label>Balance</label>
+            </settings>
+        </column>
+
+        <column name="is_active" class="KW\CustomerWallet\Ui\Component\Listing\Column\IsActive" sortOrder="100">
+            <settings>
+                <filter>select</filter>
+                <options class="KW\CustomerWallet\Ui\Component\Listing\Filters\WalletActiveStateOptions" />
+                <sortable>true</sortable>
+                <label>Status</label>
             </settings>
         </column>
 

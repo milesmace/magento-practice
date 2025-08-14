@@ -57,6 +57,7 @@ class Edit extends Action
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Customer::customer');
         $resultPage->getConfig()->getTitle()->prepend(__("%1's Wallet", $customerName));
 
         return $resultPage;

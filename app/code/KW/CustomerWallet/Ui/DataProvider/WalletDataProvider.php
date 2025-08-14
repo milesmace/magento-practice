@@ -46,9 +46,10 @@ class WalletDataProvider extends AbstractDataProvider
             $customerName = $customer->getfirstname() . ' ' . $customer->getlastname();
 
             $result[] = [
-                'wallet_id' => (int) $wallet->getId(),
+                'wallet_id' => $wallet->getId(),
                 'customer_name' => $customerName,
                 'balance' => $wallet->getBalance(),
+                'is_active' => (int) $wallet->getIsActive(),
             ];
         }
 
