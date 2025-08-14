@@ -26,6 +26,6 @@ class WalletRepository implements WalletRepositoryInterface
         $wallet = $this->walletFactory->create();
         $this->walletResource->load($wallet, $walletId, 'wallet_id');
 
-        return $wallet->getWalletId() ? $wallet : null;
+        return $wallet->getId() ? $wallet : null;
     }
 }

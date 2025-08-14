@@ -17,6 +17,11 @@ use Magento\Framework\Registry;
 
 class Wallet extends AbstractModel implements WalletInterface
 {
+    protected $_idFieldName = 'wallet_id';
+    protected $_eventPrefix = 'wallet';
+    protected $_eventObject = 'wallet';
+    protected $_cacheTag = 'wallet';
+
     // Local States and data
     private ?CustomerInterface $_customer = null;
 
@@ -42,16 +47,6 @@ class Wallet extends AbstractModel implements WalletInterface
         $this->walletTransactionCollectionFactory = $walletTransactionCollectionFactory;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
-
-    public function getWalletId()
-    {
-        return (int) $this->getData(self::WALLET_ID);
-    }
-
-    public function setWalletId($walletId)
-    {
-        return $this->setData(self::WALLET_ID, $walletId);
     }
 
     public function getCustomerId()
@@ -101,7 +96,7 @@ class Wallet extends AbstractModel implements WalletInterface
      */
     public function getCustomer(): ?CustomerInterface
     {
-        if ($this->getWalletId() && $this->getCustomerId()) {
+        if ($this->getId() && $this->getCustomerId()) {
             if ($this->_customer && $this->_customer->getId()) {
                 return $this->_customer;
             }
@@ -114,9 +109,9 @@ class Wallet extends AbstractModel implements WalletInterface
 
     public function getTransactions(): ?WalletTransactionCollection
     {
-        if ($this->getWalletId() && $this->getCustomerId()) {
+        if ($this->getId() && $this->getCustomerId()) {
             $collection = $this->walletTransactionCollectionFactory->create();
-            $collection->addFieldToFilter('wallet_id', $this->getWalletId());
+            $collection->addFieldToFilter('wallet_id', $this->getId());
 
             return $collection;
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace KW\CustomerWallet\Model;
 
 use Magento\Framework\Model\AbstractModel;
@@ -6,6 +7,11 @@ use KW\CustomerWallet\Api\Data\WalletTransactionInterface;
 
 class WalletTransaction extends AbstractModel implements WalletTransactionInterface
 {
+    protected $_idFieldName = 'transaction_id';
+    protected $_eventPrefix = 'wallet_transaction';
+    protected $_eventObject = 'wallet_transaction';
+    protected $_cacheTag = 'wallet_transaction';
+
     protected function _construct()
     {
         $this->_init(\KW\CustomerWallet\Model\ResourceModel\WalletTransaction::class);

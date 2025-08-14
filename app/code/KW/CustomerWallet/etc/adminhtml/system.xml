@@ -8,7 +8,7 @@
             <resource>KW_CustomerWallet::wallet</resource>
             <group id="wallet" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Wallet Options</label>
-                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enable Wallets</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

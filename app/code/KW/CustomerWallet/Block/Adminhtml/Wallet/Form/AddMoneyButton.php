@@ -20,7 +20,7 @@ class AddMoneyButton implements ButtonProviderInterface
     {
         return [
             'label' => __('Add Money'),
-            'class' => 'action-secondary',
+            'class' => 'action',
         ];
     }
 }

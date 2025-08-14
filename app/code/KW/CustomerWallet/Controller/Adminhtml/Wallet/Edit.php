@@ -43,7 +43,7 @@ class Edit extends Action
 
         $wallet = $this->walletRepository->getById($walletId);
 
-        if (!$wallet || !$wallet->getWalletId()) {
+        if (!$wallet || !$wallet->getId()) {
             throw new LocalizedException(__('Wallet not found.'));
         }
 

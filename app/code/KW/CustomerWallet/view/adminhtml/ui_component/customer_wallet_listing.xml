@@ -23,7 +23,7 @@
         <dataProvider class="KW\CustomerWallet\Ui\DataProvider\WalletDataProvider" name="customer_wallet_listing_data_source">
             <settings>
                 <requestFieldName>wallet_id</requestFieldName>
-                <primaryFieldName>wallet_id</primaryFieldName>
+                <primaryFieldName>id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>

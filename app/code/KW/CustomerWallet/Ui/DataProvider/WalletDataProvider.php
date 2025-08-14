@@ -4,6 +4,7 @@ namespace KW\CustomerWallet\Ui\DataProvider;
 
 use KW\CustomerWallet\Api\Data\WalletInterface;
 use KW\CustomerWallet\Model\ResourceModel\Wallet\CollectionFactory as WalletCollectionFactory;
+use KW\CustomerWallet\Model\Wallet;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -39,13 +40,13 @@ class WalletDataProvider extends AbstractDataProvider
 
         $result = [];
 
-        /** @var WalletInterface $wallet */
+        /** @var Wallet $wallet */
         foreach ($this->getCollection()->getItems() as $wallet) {
             $customer = $this->customerRepository->getById($wallet->getCustomerId());
             $customerName = $customer->getfirstname() . ' ' . $customer->getlastname();
 
             $result[] = [
-                'wallet_id' => $wallet->getWalletId(),
+                'wallet_id' => (int) $wallet->getId(),
                 'customer_name' => $customerName,
                 'balance' => $wallet->getBalance(),
             ];

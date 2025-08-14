@@ -7,19 +7,14 @@ use KW\CustomerWallet\Api\Data\WalletTopupInterface;
 
 class WalletTopup extends AbstractModel implements WalletTopupInterface
 {
+    protected $_idFieldName = 'topup_id';
+    protected $_eventPrefix = 'wallet_topup';
+    protected $_eventObject = 'wallet_topup';
+    protected $_cacheTag = 'wallet_topup';
+
     protected function _construct()
     {
         $this->_init(\KW\CustomerWallet\Model\ResourceModel\WalletTopup::class);
-    }
-
-    public function getTopupId()
-    {
-        return (int) $this->getData(self::TOPUP_ID);
-    }
-
-    public function setTopupId($topupId)
-    {
-        return $this->setData(self::TOPUP_ID, $topupId);
     }
 
     public function getWalletId()

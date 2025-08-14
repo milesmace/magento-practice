@@ -1,4 +1,5 @@
 <?php
+
 namespace KW\CustomerWallet\Ui\DataProvider\Wallet\Form;
 
 use KW\CustomerWallet\Model\ResourceModel\Wallet\CollectionFactory as WalletCollectionFactory;
@@ -26,22 +27,17 @@ class DataProvider extends AbstractDataProvider
 
     public function getData()
     {
-        if ($this->loadedData !== null) {
+        if (!empty($this->loadedData)) {
             return $this->loadedData;
         }
 
-        $walletId = $this->request->getParam('wallet_id');
-        if (!$walletId) {
-            return [];
+        $walletId = (int) $this->request->getParam('wallet_id');
+        if ($walletId) {
+            $wallet = $this->collection->getItemById($walletId);
+            if ($wallet) {
+                $this->loadedData[$walletId] = $wallet->getData();
+            }
         }
-
-        $wallet = $this->collection->addFieldToFilter('wallet_id', $walletId)->getFirstItem();
-        if (!$wallet) {
-            return [];
-        }
-
-        $this->loadedData[$wallet->getWalletId()] = $wallet->getData();
-
 
         return $this->loadedData;
     }

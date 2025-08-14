@@ -12,6 +12,6 @@ class Wallet extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('customer_wallet', 'entity_id');
+        $this->_init('customer_wallet', 'wallet_id');
     }
 }

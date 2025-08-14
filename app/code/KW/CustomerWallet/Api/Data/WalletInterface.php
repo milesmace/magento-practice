@@ -7,23 +7,11 @@ interface WalletInterface
     /**#@+
      * Constants for keys
      */
-    const WALLET_ID = 'wallet_id';
     const CUSTOMER_ID = 'customer_id';
     const BALANCE = 'balance';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     /**#@-*/
-
-    /**
-     * @return int
-     */
-    public function getWalletId();
-
-    /**
-     * @param int $walletId
-     * @return $this
-     */
-    public function setWalletId($walletId);
 
     /**
      * @return int
