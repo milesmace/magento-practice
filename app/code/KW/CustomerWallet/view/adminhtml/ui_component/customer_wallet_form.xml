@@ -15,6 +15,7 @@
         <item name="spinner" xsi:type="string">general_information</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
     </argument>
+
     <settings>
         <buttons>
             <button name="save" class="KW\CustomerWallet\Block\Adminhtml\Wallet\Form\SaveButton" />
@@ -23,6 +24,7 @@
         </buttons>
     </settings>
 
+    <!-- Form Data Source -->
     <dataSource name="customer_wallet_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">KW\CustomerWallet\Ui\DataProvider\Wallet\Form\DataProvider
@@ -36,12 +38,12 @@
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
-
         <settings>
             <submitUrl path="*/*/save"/>
         </settings>
     </dataSource>
 
+    <!-- Wallet Information Section -->
     <fieldset name="general_information">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -50,7 +52,6 @@
                 <item name="sortOrder" xsi:type="number">10</item>
             </item>
         </argument>
-
         <field name="wallet_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -66,7 +67,6 @@
                 </item>
             </argument>
         </field>
-
         <field name="is_active">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -82,7 +82,6 @@
                 </item>
             </argument>
         </field>
-
         <field name="balance">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -98,4 +97,85 @@
             </argument>
         </field>
     </fieldset>
+
+    <!-- Transaction Listing Section -->
+    <fieldset name="transaction_listing">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="label" xsi:type="string" translate="true">Wallet Transactions</item>
+                <item name="sortOrder" xsi:type="number">20</item>
+            </item>
+        </argument>
+
+        <insertListing name="customer_wallet_transaction_listing" component="Magento_Customer/js/form/components/insert-listing">
+            <settings>
+                <dataLinks>
+                    <exports>false</exports>
+                    <imports>true</imports>
+                </dataLinks>
+                <externalProvider>customer_wallet_transaction_listing.customer_wallet_transaction_listing_data_source</externalProvider>
+                <autoRender>true</autoRender>
+                <dataScope>customer_wallet_transaction_listing</dataScope>
+                <ns>customer_wallet_transaction_listing</ns>
+                <exports>
+                    <link name="wallet_id">${ $.externalProvider }:params.wallet_id</link>
+                </exports>
+                <imports>
+                    <link name="wallet_id">${ $.provider }:data.wallet_id</link>
+                </imports>
+            </settings>
+        </insertListing>
+    </fieldset>
+
+    <!-- Topup Listing Section -->
+    <fieldset name="topup_listing">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="label" xsi:type="string" translate="true">Wallet Topups</item>
+                <item name="sortOrder" xsi:type="number">30</item>
+            </item>
+        </argument>
+
+        <insertListing name="customer_wallet_topup_listing" component="Magento_Customer/js/form/components/insert-listing">
+            <settings>
+                <dataLinks>
+                    <exports>false</exports>
+                    <imports>true</imports>
+                </dataLinks>
+                <externalProvider>customer_wallet_topup_listing.customer_wallet_topup_listing_data_source</externalProvider>
+                <autoRender>true</autoRender>
+                <dataScope>customer_wallet_topup_listing</dataScope>
+                <ns>customer_wallet_topup_listing</ns>
+                <exports>
+                    <link name="wallet_id">${ $.externalProvider }:params.wallet_id</link>
+                </exports>
+                <imports>
+                    <link name="wallet_id">${ $.provider }:data.wallet_id</link>
+                </imports>
+            </settings>
+        </insertListing>
+    </fieldset>
+
+    <modal name="wallet_add_money_modal">
+        <settings>
+            <options>
+                <option name="buttons" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="text" xsi:type="string">Done</item>
+                        <item name="class" xsi:type="string">action-primary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">${ $.name }</item>
+                                <item name="actionName" xsi:type="string">actionDone</item>
+                            </item>
+                        </item>
+                    </item>
+                </option>
+                <option name="title" xsi:type="string">Dolphin MODEL</option>
+            </options>
+            <onCancel>actionDone</onCancel>
+        </settings>
+    </modal>
 </form>

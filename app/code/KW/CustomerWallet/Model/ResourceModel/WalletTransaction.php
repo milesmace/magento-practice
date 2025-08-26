@@ -8,6 +8,6 @@ class WalletTransaction extends AbstractDb
 {
     protected function _construct()
     {
-        $this->_init(WalletTransaction::class, 'transaction_id');
+        $this->_init('wallet_transactions', 'transaction_id');
     }
 }

@@ -20,7 +20,7 @@
             <updateUrl path="mui/index/render" />
         </settings>
         <aclResource>KW_CustomerWallet::wallet</aclResource>
-        <dataProvider class="KW\CustomerWallet\Ui\DataProvider\WalletDataProvider" name="customer_wallet_listing_data_source">
+        <dataProvider class="KW\CustomerWallet\Ui\DataProvider\Wallet\Grid\DataProvider" name="customer_wallet_listing_data_source">
             <settings>
                 <requestFieldName>wallet_id</requestFieldName>
                 <primaryFieldName>wallet_id</primaryFieldName>

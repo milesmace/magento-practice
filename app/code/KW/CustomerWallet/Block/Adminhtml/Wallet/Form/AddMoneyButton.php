@@ -2,14 +2,12 @@
 
 namespace KW\CustomerWallet\Block\Adminhtml\Wallet\Form;
 
-use Magento\Framework\Registry;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 class AddMoneyButton implements ButtonProviderInterface
 {
 
     public function __construct(
-        private Registry $registry,
     ) {
     }
 
@@ -20,7 +18,20 @@ class AddMoneyButton implements ButtonProviderInterface
     {
         return [
             'label' => __('Add Money'),
-            'class' => 'action',
+            'class' => 'action-secondary',
+            'data_attribute' => [
+                'mage-init' => [
+                    'Magento_Ui/js/form/button-adapter' => [
+                        'actions' => [
+                            [
+                                'targetName' => 'customer_wallet_form.customer_wallet_form.wallet_add_money_form',
+                                'actionName' => 'toggleModal'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'on_click' => '',
         ];
     }
 }

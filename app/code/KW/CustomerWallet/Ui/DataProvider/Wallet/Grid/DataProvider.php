@@ -1,8 +1,7 @@
 <?php
 
-namespace KW\CustomerWallet\Ui\DataProvider;
+namespace KW\CustomerWallet\Ui\DataProvider\Wallet\Grid;
 
-use KW\CustomerWallet\Api\Data\WalletInterface;
 use KW\CustomerWallet\Model\ResourceModel\Wallet\CollectionFactory as WalletCollectionFactory;
 use KW\CustomerWallet\Model\Wallet;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -10,7 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
-class WalletDataProvider extends AbstractDataProvider
+class DataProvider extends AbstractDataProvider
 {
     private CustomerRepositoryInterface $customerRepository;
 
@@ -19,12 +18,12 @@ class WalletDataProvider extends AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CustomerRepositoryInterface $customerRepository,
-        WalletCollectionFactory $walletCollectionFactory,
+        WalletCollectionFactory $transactionCollectionFactory,
         array $meta = [],
         array $data = []
     ) {
         $this->customerRepository = $customerRepository;
-        $this->collection = $walletCollectionFactory->create();
+        $this->collection = $transactionCollectionFactory->create();
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 

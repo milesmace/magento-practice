@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd"
+         name="customer_wallet_transaction_listing">
+
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">customer_wallet_transaction_listing.customer_wallet_transaction_listing_data_source</item>
+            <item name="deps" xsi:type="string">customer_wallet_transaction_listing.customer_wallet_transaction_listing_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Wallet Transactions</item>
+        <item name="spinner" xsi:type="string">customer_wallet_transaction_columns</item>
+    </argument>
+
+    <!-- Data Source -->
+    <dataSource name="customer_wallet_transaction_listing.customer_wallet_transaction_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <filterUrlParams>
+                <param name="id">*</param>
+            </filterUrlParams>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render" />
+        </settings>
+        <aclResource>KW_CustomerWallet::wallet</aclResource>
+        <dataProvider class="KW\CustomerWallet\Ui\DataProvider\Transaction\Grid\DataProvider" name="customer_wallet_transaction_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <!-- Listing Toolbar -->
+    <listingToolbar name="listing_top">
+        <filters name="listing_filters" />
+        <paging name="listing_paging" />
+    </listingToolbar>
+
+    <!-- Columns -->
+    <columns name="customer_wallet_transaction_columns">
+        <column name="id" sortOrder="0">
+            <settings>
+                <filter>textRange</filter>
+                <sortable>true</sortable>
+                <label>ID</label>
+            </settings>
+        </column>
+
+        <column name="amount" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <sortable>false</sortable>
+                <label>Amount</label>
+            </settings>
+        </column>
+
+        <column name="reference_order" sortOrder="20">
+            <settings>
+                <sortable>false</sortable>
+                <label>Ref. Order</label>
+            </settings>
+        </column>
+
+        <column name="reference_wallet" sortOrder="30">
+            <settings>
+                <sortable>false</sortable>
+                <label>Ref. Wallet</label>
+            </settings>
+        </column>
+
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" sortOrder="100">
+            <settings>
+                <sortable>true</sortable>
+                <label>Date</label>
+            </settings>
+        </column>
+    </columns>
+</listing>
