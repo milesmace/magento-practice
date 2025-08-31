@@ -3,6 +3,8 @@
 /** @var \KW\CustomerWallet\Api\Data\WalletInterface $wallet */
 $wallet = $block->getWallet();
 $priceHelper = $block->getPriceHelper();
+$transactions = $block->getTransactions();
+$topups = $wallet->getTopups();
 ?>
 
 <div class="block block-account-wallet-info">
@@ -14,14 +16,225 @@ $priceHelper = $block->getPriceHelper();
                 <table class='wallet-summary'>
                     <tr>
                         <td><?= $block->escapeHtml(__('Wallet Balance:')) ?></td>
-                        <td><strong><?= $priceHelper->currency($wallet->getBalance()) ?></strong></td>
+                        <td><strong><?= $block->getWalletBalance() ?></strong></td>
                     </tr>
                     <tr>
                         <td><?= $block->escapeHtml(__('Total Orders:')) ?></td>
-                        <td><strong><?= $block->getTotalOrders() ?></strong></td>
+                        <td><strong><?= $block->getWalletTotalOrders() ?></strong></td>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
+</div>
+<?php if (!$wallet->getIsActive()): ?>
+    <div class='wallet_disabled_wrapper'></div>
+<?php endif; ?>
+
+<!-- Transactions -->
+<div class='block block-account-wallet-transactions'>
+    <div class='block-title'><strong><?= $block->escapehtml(__('Wallet Transactions')) ?></strong></div>
+
+    <?php
+    if ($transactions && count($transactions)) : ?>
+        <div class="table-wrapper wallet-transactions-history">
+            <table class="data table table-wallet-transaction-items history" id="my-wallet-transactions-table">
+                <caption class="table-caption"><?= $block->escapehtml(__('wallet topups')) ?></caption>
+                <thead>
+                <tr>
+                    <th scope="col" class="col id"><?= $block->escapehtml(__('Transaction #')) ?></th>
+                    <th scope="col" class="col date"><?= $block->escapehtml(__('Date')) ?></th>
+                    <th scope='col' class='col type'><?= $block->escapehtml(__('Type')) ?></th>
+                    <th scope="col" class="col amount"><?= $block->escapehtml(__('Amount')) ?></th>
+                    <th scope='col' class='col ref-order'><?= $block->escapehtml(__('Ref. order #')) ?></th>
+                    <th scope='col' class='col ref-wallet'><?= $block->escapehtml(__('Ref. wallet #')) ?></th>
+                    <th scope='col' class='col note'><?= $block->escapehtml(__('Note')) ?></th>
+                    <!--                    <th scope="col" class="col actions">--><?php
+                    //= $block->escapehtml(__('action'))?><!--</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($transactions as $transaction) : ?>
+                    <tr>
+                        <td data-th="<?= $block->escapehtml(__('transaction #')) ?>"
+                            class="col id"><?= $block->escapehtml($transaction->getid()) ?></td>
+                        <td data-th="<?= $block->escapehtml(__('date')) ?>" class="col date"><?= /* @noescape */
+                            $block->formatdate($transaction->getcreatedat()) ?></td>
+                        <td data-th="<?= $block->escapehtml(__('type')) ?>" class='col type'><?= /* @noescape */
+                            $transaction->gettype() ?></td>
+                        <td data-th="<?= $block->escapehtml(__('amount')) ?>" class="col amount"><?= /* @noescape */
+                            $priceHelper->currency($transaction->getamount()) ?></td>
+                        <td data-th="<?= $block->escapehtml(__('ref. order #')) ?>"
+                            class='col ref-order'><?= /* @noescape */
+                                $transaction->getreferenceorderid() ?? '--' ?></td>
+                        <td data-th="<?= $block->escapehtml(__('ref. wallet #')) ?>"
+                            class='col ref-wallet'><?= /* @noescape */
+                                $transaction->getrelatedwalletid() ?? '--' ?></td>
+                        <td data-th="<?= $block->escapehtml(__('note')) ?>" class='col note'><?= /* @noescape */
+                                $transaction->getdescription() ?? '--' ?></td>
+                        <!--                        <td data-th="--><?php
+                        //= $block->escapehtml(__('actions'))?><!--" class="col actions">-->
+                        <!--                            --><?php
+                        //if ($transaction->getstatus() != 'received'):?>
+                        <!--                                <a href="--><?php
+                        //= $block->escapeurl($block->getviewurl($transaction))?><!--" class="action view">-->
+                        <!--                                    <span>--><?php
+                        //= $block->escapehtml(__('view order'))?><!--</span>-->
+                        <!--                                </a>-->
+                        <!--                                --><?php
+                        //if ($this->helper(\magento\sales\helper\reorder::class)->canreorder($transaction->getentityid())) :?>
+                        <!--                                    <a href="#" data-post='--><?php
+                        //= /* @noescape */
+                        //                                    $this->helper(\magento\framework\data\helper\posthelper::class)
+                        //                                        ->getpostdata($block->getreorderurl($transaction))
+                        //?><!--' class="action order">-->
+                        <!--                                        <span>--><?php
+                        //= $block->escapehtml(__('reorder'))?><!--</span>-->
+                        <!--                                    </a>-->
+                        <!--                                --><?php
+                        //endif?>
+                        <!--                                --><?php
+                        //if ($viewmodel->cancancel($transaction->getentityid())):?>
+                        <!--                                    <a href="#" class="cancel-order"-->
+                        <!--                                       id="cancel-order---><?php
+                        //=/* @noescape */ $transaction->getid()?><!--" data-mage-init='{-->
+                        <!--                                       "cancelordermodal":{-->
+                        <!--                                           "url": "--><?php
+                        //=/* @noescape */ $block->getbaseurl();?><!--",-->
+                        <!--                                           "order_id": "--><?php
+                        //= $block->escapehtml(__($transaction->getid()));?><!--"-->
+                        <!--                                       }-->
+                        <!--                                    }'>-->
+                        <!--                                        <span>--><?php
+                        //= $block->escapehtml(__('cancel order'))?><!--</span>-->
+                        <!--                                    </a>-->
+                        <!--                                    --><?php
+                        //= $this->getlayout()->createblock("magento\framework\view\element\template")
+                        //                                        ->setorder($transaction)
+                        //                                        ->setreasons($viewmodel->getcancellationreasons($transaction->getentityid()))
+                        //                                        ->settemplate("magento_ordercancellationui::cancel-order-modal.phtml")->tohtml()
+                        //?>
+                        <!--                                --><?php
+                        //endif?>
+                        <!--                            --><?php
+                        //endif?>
+                        <!--                        </td>-->
+                    </tr>
+                <?php
+                endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <!--        --><?php
+        //if ($block->getchildhtml('pager')) :?>
+        <!--            <div class="wallet-transactions-toolbar toolbar bottom">--><?php
+        //= $block->getchildhtml('pager')?><!--</div>-->
+        <!--        --><?php
+        //endif?>
+    <?php
+    else : ?>
+        <div class="message info empty"><span><?= $block->escapehtml($block->getemptytransactionsmessage()) ?></span>
+        </div>
+    <?php
+    endif ?>
+</div>
+
+<!-- Topups -->
+<div class='block block-account-wallet-topups'>
+    <div class='block-title'><strong><?= $block->escapeHtml(__('Wallet Topups')) ?></strong></div>
+
+    <?php
+    if ($topups && count($topups)) : ?>
+        <div class="table-wrapper wallet-topups-history">
+            <table class="data table table-wallet-topup-items history" id="my-wallet-topups-table">
+                <caption class="table-caption"><?= $block->escapeHtml(__('Wallet Topups')) ?></caption>
+                <thead>
+                <tr>
+                    <th scope="col" class="col id"><?= $block->escapeHtml(__('Topup #')) ?></th>
+                    <th scope="col" class="col date"><?= $block->escapeHtml(__('Date')) ?></th>
+                    <?= $block->getChildHtml('extra.column.header') ?>
+                    <th scope="col" class="col total"><?= $block->escapeHtml(__('Amount')) ?></th>
+                    <th scope='col' class='col note'><?= $block->escapeHtml(__('Note')) ?></th>
+                    <!--                    <th scope="col" class="col actions">--><?php
+                    //= $block->escapeHtml(__('Action'))?><!--</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($topups as $topup) : ?>
+                    <tr>
+                        <td data-th="<?= $block->escapeHtml(__('Topup #')) ?>" class="col id"><?= $block->escapeHtml(
+                                $topup->getId()
+                            ) ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date"><?= /* @noEscape */
+                            $block->formatDate($topup->getCreatedAt()) ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Amount')) ?>" class="col total"><?= /* @noEscape */
+                            $priceHelper->currency($topup->getAmount()) ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Note')) ?>" class='col note'><?= /* @noEscape */
+                                $topup->getNote() ?? '--' ?></td>
+                        <!--                        <td data-th="--><?php
+                        //= $block->escapeHtml(__('Actions'))?><!--" class="col actions">-->
+                        <!--                            --><?php
+                        //if ($topup->getStatus() != 'received'):?>
+                        <!--                                <a href="--><?php
+                        //= $block->escapeUrl($block->getViewUrl($topup))?><!--" class="action view">-->
+                        <!--                                    <span>--><?php
+                        //= $block->escapeHtml(__('View Order'))?><!--</span>-->
+                        <!--                                </a>-->
+                        <!--                                --><?php
+                        //if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($topup->getEntityId())) :?>
+                        <!--                                    <a href="#" data-post='--><?php
+                        //= /* @noEscape */
+                        //                                    $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                        //                                        ->getPostData($block->getReorderUrl($topup))
+                        //?><!--' class="action order">-->
+                        <!--                                        <span>--><?php
+                        //= $block->escapeHtml(__('Reorder'))?><!--</span>-->
+                        <!--                                    </a>-->
+                        <!--                                --><?php
+                        //endif?>
+                        <!--                                --><?php
+                        //if ($viewModel->canCancel($topup->getEntityId())):?>
+                        <!--                                    <a href="#" class="cancel-order"-->
+                        <!--                                       id="cancel-order---><?php
+                        //=/* @noEscape */ $topup->getId()?><!--" data-mage-init='{-->
+                        <!--                                       "cancelOrderModal":{-->
+                        <!--                                           "url": "--><?php
+                        //=/* @noEscape */ $block->getBaseUrl();?><!--",-->
+                        <!--                                           "order_id": "--><?php
+                        //= $block->escapeHtml(__($topup->getId()));?><!--"-->
+                        <!--                                       }-->
+                        <!--                                    }'>-->
+                        <!--                                        <span>--><?php
+                        //= $block->escapeHtml(__('Cancel Order'))?><!--</span>-->
+                        <!--                                    </a>-->
+                        <!--                                    --><?php
+                        //= $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")
+                        //                                        ->setOrder($topup)
+                        //                                        ->setReasons($viewModel->getCancellationReasons($topup->getEntityId()))
+                        //                                        ->setTemplate("Magento_OrderCancellationUi::cancel-order-modal.phtml")->toHtml()
+                        //?>
+                        <!--                                --><?php
+                        //endif?>
+                        <!--                            --><?php
+                        //endif?>
+                        <!--                        </td>-->
+                    </tr>
+                <?php
+                endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <!--        --><?php
+        //if ($block->getChildHtml('pager')) :?>
+        <!--            <div class="wallet-topups-toolbar toolbar bottom">--><?php
+        //= $block->getChildHtml('pager')?><!--</div>-->
+        <!--        --><?php
+        //endif?>
+    <?php
+    else : ?>
+        <div class="message info empty"><span><?= $block->escapeHtml($block->getEmptyTopupsMessage()) ?></span></div>
+    <?php
+    endif ?>
 </div>

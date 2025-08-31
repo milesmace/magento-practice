@@ -2,26 +2,26 @@
 
 namespace KW\CustomerWallet\Controller\Adminhtml\Wallet;
 
-use KW\CustomerWallet\Api\Data\WalletInterfaceFactory;
 use KW\CustomerWallet\Api\WalletRepositoryInterface;
+use KW\CustomerWallet\Model\WalletService;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 
 class AddMoney extends Action
 {
-    private WalletRepositoryInterface $walletRepository;
-    private WalletInterfaceFactory $walletFactory;
 
     public function __construct(
         Action\Context $context,
-        WalletRepositoryInterface $walletRepository,
-        WalletInterfaceFactory $walletFactory
+        private WalletRepositoryInterface $walletRepository,
+        private WalletService $walletService,
     ) {
         parent::__construct($context);
-        $this->walletRepository = $walletRepository;
-        $this->walletFactory = $walletFactory;
     }
 
+    /**
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     * @throws LocalizedException
+     */
     public function execute()
     {
         if (!$this->getRequest()->isPost()) {
@@ -31,19 +31,14 @@ class AddMoney extends Action
         $data = $this->getRequest()->getPostValue();
         $walletId = (int) $this->getRequest()->getParam('wallet_id');
 
-        try {
-            if ($walletId) {
-                $wallet = $this->walletRepository->getById($walletId);
-            } else {
-                $wallet = $this->walletFactory->create();
-            }
-
-            $wallet->addMoney($data['amount'], '');
-            $this->messageManager->addSuccessMessage(__('Successfully added money to wallet.'));
-
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('Error: %1', $e->getMessage()));
+        $wallet = $this->walletRepository->getById($walletId);
+        if (!$wallet) {
+            $this->messageManager->addErrorMessage(__('Wallet not found.'));
+            return $this->_redirect('*/wallets/index');
         }
+
+        $this->walletService->addFundsToWallet($walletId, $data['amount'], $data['note']);
+        $this->messageManager->addSuccessMessage(__('Successfully added money to wallet.'));
 
         return $this->_redirect('*/*/edit', ['wallet_id' => $walletId]);
     }

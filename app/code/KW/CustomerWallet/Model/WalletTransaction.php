@@ -22,9 +22,10 @@ class WalletTransaction extends AbstractModel implements WalletTransactionInterf
         return (int) $this->getData(self::TRANSACTION_ID);
     }
 
-    public function setTransactionId($transactionId)
+    public function setTransactionId($transactionId): WalletTransactionInterface
     {
-        return $this->setData(self::TRANSACTION_ID, $transactionId);
+        $this->setData(self::TRANSACTION_ID, $transactionId);
+        return $this;
     }
 
     public function getWalletId()
@@ -32,19 +33,21 @@ class WalletTransaction extends AbstractModel implements WalletTransactionInterf
         return (int) $this->getData(self::WALLET_ID);
     }
 
-    public function setWalletId($walletId)
+    public function setWalletId($walletId): WalletTransactionInterface
     {
-        return $this->setData(self::WALLET_ID, $walletId);
+        $this->setData(self::WALLET_ID, $walletId);
+        return $this;
     }
 
-    public function getType()
+    public function getTid()
     {
-        return $this->getData(self::TYPE);
+        return $this->getData(self::TID);
     }
 
-    public function setType($type)
+    public function setTid($tid): WalletTransactionInterface
     {
-        return $this->setData(self::TYPE, $type);
+        $this->setData(self::TID, $tid);
+        return $this;
     }
 
     public function getAmount()
@@ -52,9 +55,10 @@ class WalletTransaction extends AbstractModel implements WalletTransactionInterf
         return (float) $this->getData(self::AMOUNT);
     }
 
-    public function setAmount($amount)
+    public function setAmount($amount): WalletTransactionInterface
     {
-        return $this->setData(self::AMOUNT, $amount);
+        $this->setData(self::AMOUNT, $amount);
+        return $this;
     }
 
     public function getRelatedWalletId()
@@ -62,9 +66,10 @@ class WalletTransaction extends AbstractModel implements WalletTransactionInterf
         return $this->getData(self::RELATED_WALLET_ID);
     }
 
-    public function setRelatedWalletId($relatedWalletId)
+    public function setRelatedWalletId($relatedWalletId): WalletTransactionInterface
     {
-        return $this->setData(self::RELATED_WALLET_ID, $relatedWalletId);
+        $this->setData(self::RELATED_WALLET_ID, $relatedWalletId);
+        return $this;
     }
 
     public function getOrderId()
@@ -72,9 +77,10 @@ class WalletTransaction extends AbstractModel implements WalletTransactionInterf
         return $this->getData(self::ORDER_ID);
     }
 
-    public function setOrderId($orderId)
+    public function setOrderId($orderId): WalletTransactionInterface
     {
-        return $this->setData(self::ORDER_ID, $orderId);
+        $this->setData(self::ORDER_ID, $orderId);
+        return $this;
     }
 
     public function getDescription()
@@ -82,9 +88,10 @@ class WalletTransaction extends AbstractModel implements WalletTransactionInterf
         return $this->getData(self::DESCRIPTION);
     }
 
-    public function setDescription($description)
+    public function setDescription($description): WalletTransactionInterface
     {
-        return $this->setData(self::DESCRIPTION, $description);
+        $this->setData(self::DESCRIPTION, $description);
+        return $this;
     }
 
     public function getCreatedAt()
@@ -92,8 +99,9 @@ class WalletTransaction extends AbstractModel implements WalletTransactionInterf
         return $this->getData(self::CREATED_AT);
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt): WalletTransactionInterface
     {
-        return $this->setData(self::CREATED_AT, $createdAt);
+        $this->setData(self::CREATED_AT, $createdAt);
+        return $this;
     }
 }

@@ -1,0 +1,14 @@
+.pos_rel {
+    position: relative;
+}
+.wallet_disabled_wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: #0004;
+    pointer-events: none;
+    cursor: not-allowed;
+    backdrop-filter: blur(5px);
+    position: absolute;
+    z-index: 100;
+    inset: 0;
+}

@@ -5,6 +5,8 @@
         <wallet>
             <wallet>
                 <enabled>0</enabled>
+                <welcome_credit_enabled>0</welcome_credit_enabled>
+                <welcome_credit_amount>2</welcome_credit_amount>
             </wallet>
         </wallet>
     </default>

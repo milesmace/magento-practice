@@ -11,14 +11,21 @@
                 <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enable Wallets</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable Wallet as a payment method</comment>
                 </field>
-<!--                <field id="lifetime" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">-->
-<!--                    <label>Persistence Lifetime (seconds)</label>-->
-<!--                    <validate>validate-digits validate-digits-range digits-range-0-3153600000</validate>-->
-<!--                    <depends>-->
-<!--                        <field id="enabled">1</field>-->
-<!--                    </depends>-->
-<!--                </field>-->
+                <field id="welcome_credit_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enable Welcome Credits</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Credits some amount to the wallet when created</comment>
+                </field>
+                <field id="welcome_credit_amount" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <depends>
+                        <field id="welcome_credit_enabled">1</field>
+                    </depends>
+                    <label>Welcome Credit</label>
+                    <validate>required-entry validate-number validate-range range-1-20</validate>
+                    <comment>Enter a number between 1 and 20. This much amount will be credited once the wallet is setup for a new customer.</comment>
+                </field>
             </group>
         </section>
     </system>

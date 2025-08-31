@@ -9,6 +9,7 @@ interface WalletInterface
      */
     const CUSTOMER_ID = 'customer_id';
     const BALANCE = 'balance';
+    const PUBLIC_HASH = 'public_hash';
     const IS_ACTIVE = 'is_active';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -35,6 +36,17 @@ interface WalletInterface
      * @return $this
      */
     public function setBalance($balance);
+
+    /**
+     * @return string
+     */
+    public function getPublicHash(): string;
+
+    /**
+     * @param string $publicHash
+     * @return $this
+     */
+    public function setPublicHash(string $publicHash): WalletInterface;
 
     /**
      * @return bool

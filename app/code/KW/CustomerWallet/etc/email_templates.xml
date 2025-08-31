@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+
+    <template id="wallet_welcome_credit" label="Customer Wallet Welcome Credit"
+              file="wallet/welcome_credit.html" type="html" module="KW_CustomerWallet" area="frontend"/>
+
+    <template id="wallet_setup_complete" label="Customer Wallet Setup Complete"
+              file="wallet/setup_complete.html" type="html" module="KW_CustomerWallet" area="frontend"/>
+</config>

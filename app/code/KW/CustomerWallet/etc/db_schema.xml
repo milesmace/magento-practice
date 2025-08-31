@@ -7,6 +7,7 @@
         <column xsi:type="int" name="customer_id" unsigned="true" nullable="false" comment="Customer ID"/>
         <column xsi:type="smallint" name="is_active" unsigned="true" nullable="false" default="1" comment="Wallet Active status"/>
         <column xsi:type="decimal" name="balance" scale="4" precision="12" nullable="false" default="0.0000" comment="Wallet Balance"/>
+        <column xsi:type="varchar" length="64" name="public_hash" nullable="false" comment="Public Identification Hash of the wallet"/>
         <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
 
@@ -15,7 +16,8 @@
         </constraint>
 
         <constraint xsi:type="unique" referenceId="CUSTOMER_WALLET_CUSTOMER_ID_UNIQUE">
-            <column name="customer_id"/>
+            <column name="customer_id" />
+            <column name="public_hash" />
         </constraint>
 
         <constraint xsi:type="foreign" referenceId="CUSTOMER_WALLET_CUSTOMER_ID_FK" table="customer_wallet" column="customer_id"
@@ -25,6 +27,7 @@
     <table name="wallet_transactions" resource="default" engine="innodb" comment="Wallet Transactions">
         <column xsi:type="int" name="transaction_id" unsigned="true" nullable="false" identity="true" comment="Transaction ID"/>
         <column xsi:type="int" name="wallet_id" unsigned="true" nullable="false" comment="Wallet ID"/>
+        <column xsi:type="varchar" length="32" name="tid" unsigned="true" nullable="false" comment="Unique Transaction ID"/>
         <column xsi:type="decimal" name="amount" scale="4" precision="12" nullable="false" comment="Transaction Amount"/>
         <column xsi:type="int" name="related_wallet_id" unsigned="true" nullable="true" comment="Related Wallet ID"/>
         <column xsi:type="int" name="order_id" unsigned="true" nullable="true" comment="Order ID"/>

@@ -35,4 +35,10 @@ class WalletRepository implements WalletRepositoryInterface
 
         return $wallet->getId() ? $wallet : null;
     }
+
+    public function save(WalletInterface $wallet): ?WalletInterface
+    {
+        $this->walletResource->save($wallet);
+        return $wallet;
+    }
 }

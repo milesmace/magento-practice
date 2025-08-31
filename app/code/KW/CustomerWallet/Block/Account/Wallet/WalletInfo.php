@@ -4,6 +4,7 @@ namespace KW\CustomerWallet\Block\Account\Wallet;
 
 use KW\CustomerWallet\Api\Data\WalletInterface;
 use KW\CustomerWallet\Api\WalletRepositoryInterface;
+use KW\CustomerWallet\Model\WalletService;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Pricing\Helper\Data as PriceHelper;
@@ -18,6 +19,7 @@ class WalletInfo extends Template
         private CurrentCustomer $currentCustomer,
         private PriceHelper $priceHelper,
         private WalletRepositoryInterface $walletRepository,
+        private WalletService $walletService,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -35,16 +37,53 @@ class WalletInfo extends Template
         return $this->_wallet;
     }
 
+    public function getWalletBalance(): string
+    {
+        $wallet = $this->getWallet();
+        if ($wallet->getIsActive()) {
+            return $this->priceHelper->currency($wallet->getBalance());
+        }
+
+        return 'Nan';
+    }
+
+    public function getWalletTotalOrders(): string
+    {
+        $wallet = $this->getWallet();
+        if ($wallet->getIsActive()) {
+            return 0;
+        }
+
+        return 'Nan';
+    }
+
+    /**
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getTransactions(): array
     {
         $walletId = $this->getWallet()->getId();
 
-        $transactions = $this->getWallet()->getTransactions();
+        $transactions = $this->walletService->getWalletTransactions($walletId);
         foreach ($transactions as $transaction) {
             $transaction['type'] = $transaction->getWalletId() == $walletId ? __('Debit') : __('Credit');
         }
 
-        return $transactions;
+        return $transactions->getItems();
+    }
+
+    /**
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getTopups(): array
+    {
+        $walletId = $this->getWallet()->getId();
+
+        $topups = $this->walletService->getWalletTopups($walletId);
+
+        return $topups->getItems();
     }
 
     public function getEmptyTransactionsMessage(): string
@@ -55,11 +94,6 @@ class WalletInfo extends Template
     public function getEmptyTopupsMessage(): string
     {
         return __('You have no Wallet Topups.');
-    }
-
-    public function getTotalOrders(): int
-    {
-        return 0;
     }
 
     public function getPriceHelper(): PriceHelper

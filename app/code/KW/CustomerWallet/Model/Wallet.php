@@ -3,10 +3,6 @@
 namespace KW\CustomerWallet\Model;
 
 use KW\CustomerWallet\Api\Data\WalletInterface;
-use KW\CustomerWallet\Api\Data\WalletTransactionInterface;
-use KW\CustomerWallet\Model\ResourceModel\WalletTransaction\Collection as WalletTransactionCollection;
-use KW\CustomerWallet\Model\ResourceModel\WalletTransaction\CollectionFactory as WalletTransactionCollectionFactory;
-use KW\CustomerWallet\Model\ResourceModel\WalletTopup\CollectionFactory as WalletTopupCollectionFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Data\Collection\AbstractDb as AbstractDbCollection;
@@ -36,9 +32,6 @@ class Wallet extends AbstractModel implements WalletInterface
         Context $context,
         Registry $registry,
         private CustomerRepositoryInterface $customerRepository,
-        private WalletTransactionCollectionFactory $walletTransactionCollectionFactory,
-        private WalletTopupCollectionFactory $walletTopupCollectionFactory,
-        private WalletTopupFactory $walletTopupFactory,
         ?AbstractResource $resource = null,
         ?AbstractDbCollection $resourceCollection = null,
         array $data = []
@@ -64,6 +57,16 @@ class Wallet extends AbstractModel implements WalletInterface
     public function setBalance($balance)
     {
         return $this->setData(self::BALANCE, $balance);
+    }
+
+    public function getPublicHash(): string
+    {
+        return $this->getData(self::PUBLIC_HASH);
+    }
+
+    public function setPublicHash(string $publicHash): WalletInterface
+    {
+        return $this->setData(self::PUBLIC_HASH, $publicHash);
     }
 
     public function getIsActive()
@@ -112,48 +115,5 @@ class Wallet extends AbstractModel implements WalletInterface
             return $this->_customer;
         }
         return null;
-    }
-
-    public function getTransactions(): ?array
-    {
-        if ($this->getId() && $this->getCustomerId()) {
-            $collection = $this->walletTransactionCollectionFactory->create();
-            $collection->addFieldToFilter(
-                ['wallet_id', WalletTransactionInterface::RELATED_WALLET_ID],
-                [$this->getId(), $this->getId()]
-            );
-
-            return $collection->getItems();
-        }
-        return null;
-    }
-
-    public function getTopups(): ?array
-    {
-        if ($this->getId() && $this->getCustomerId()) {
-            $collection = $this->walletTopupCollectionFactory->create();
-            $collection->addFieldToFilter('wallet_id', $this->getId());
-
-            return $collection->getItems();
-        }
-
-        return null;
-    }
-
-    public function addMoney(int $amount, string $note): bool
-    {
-        if ($this->getId() && $this->getCustomerId()) {
-            $topup = $this->walletTopupFactory->create();
-            $topup
-                ->setWalletId($this->getId())
-                ->setAmount($amount)
-                ->setNote($note);
-            $topup->save();
-
-            // Recalculate the balance
-            $this->setBalance($amount + $this->getBalance());
-            $this->save();
-        }
-        return true;
     }
 }

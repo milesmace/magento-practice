@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="wallet_before_save">
+        <observer name="wallet_set_public_hash"
+                  instance="KW\CustomerWallet\Observer\SetPublicHash" />
+    </event>
+
+    <event name="wallet_transaction_save_before">
+        <observer name="wallet_transaction_set_unique_transaction_id"
+                  instance="KW\CustomerWallet\Observer\SetUniqueTransactionId" />
+    </event>
+</config>

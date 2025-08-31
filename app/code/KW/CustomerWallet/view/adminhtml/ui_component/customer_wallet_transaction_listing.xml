@@ -34,7 +34,6 @@
 
     <!-- Listing Toolbar -->
     <listingToolbar name="listing_top">
-        <filters name="listing_filters" />
         <paging name="listing_paging" />
     </listingToolbar>
 
@@ -42,7 +41,6 @@
     <columns name="customer_wallet_transaction_columns">
         <column name="id" sortOrder="0">
             <settings>
-                <filter>textRange</filter>
                 <sortable>true</sortable>
                 <label>ID</label>
             </settings>
@@ -50,7 +48,6 @@
 
         <column name="amount" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="10">
             <settings>
-                <filter>textRange</filter>
                 <sortable>false</sortable>
                 <label>Amount</label>
             </settings>

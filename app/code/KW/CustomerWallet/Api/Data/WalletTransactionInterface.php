@@ -8,7 +8,7 @@ interface WalletTransactionInterface
      */
     const TRANSACTION_ID     = 'transaction_id';
     const WALLET_ID          = 'wallet_id';
-    const TYPE               = 'type';
+    const TID               = 'tid';
     const AMOUNT             = 'amount';
     const RELATED_WALLET_ID  = 'related_wallet_id';
     const ORDER_ID           = 'order_id';
@@ -17,26 +17,26 @@ interface WalletTransactionInterface
     /**#@-*/
 
     public function getTransactionId();
-    public function setTransactionId($transactionId);
+    public function setTransactionId($transactionId): WalletTransactionInterface;
 
     public function getWalletId();
-    public function setWalletId($walletId);
+    public function setWalletId($walletId): WalletTransactionInterface;
 
-    public function getType();
-    public function setType($type);
+    public function getTid();
+    public function setTid($tid): WalletTransactionInterface;
 
     public function getAmount();
-    public function setAmount($amount);
+    public function setAmount($amount): WalletTransactionInterface;
 
     public function getRelatedWalletId();
-    public function setRelatedWalletId($relatedWalletId);
+    public function setRelatedWalletId($relatedWalletId): WalletTransactionInterface;
 
     public function getOrderId();
-    public function setOrderId($orderId);
+    public function setOrderId($orderId): WalletTransactionInterface;
 
     public function getDescription();
-    public function setDescription($description);
+    public function setDescription($description): WalletTransactionInterface;
 
     public function getCreatedAt();
-    public function setCreatedAt($createdAt);
+    public function setCreatedAt($createdAt): WalletTransactionInterface;
 }
