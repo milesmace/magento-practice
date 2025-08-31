@@ -3,6 +3,7 @@
 namespace KW\CustomerWallet\Model;
 
 use KW\CustomerWallet\Api\Data\WalletInterface;
+use KW\CustomerWallet\Model\WalletTopupFactory;
 use KW\CustomerWallet\Model\ResourceModel\WalletTransaction\Collection as WalletTransactionCollection;
 use KW\CustomerWallet\Model\ResourceModel\WalletTransaction\CollectionFactory as WalletTransactionCollectionFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -25,10 +26,6 @@ class Wallet extends AbstractModel implements WalletInterface
     // Local States and data
     private ?CustomerInterface $_customer = null;
 
-    // Deps
-    private CustomerRepositoryInterface $customerRepository;
-    private WalletTransactionCollectionFactory $walletTransactionCollectionFactory;
-
     protected function _construct()
     {
         $this->_init(\KW\CustomerWallet\Model\ResourceModel\Wallet::class);
@@ -37,15 +34,13 @@ class Wallet extends AbstractModel implements WalletInterface
     public function __construct(
         Context $context,
         Registry $registry,
-        CustomerRepositoryInterface $customerRepository,
-        WalletTransactionCollectionFactory $walletTransactionCollectionFactory,
+        private CustomerRepositoryInterface $customerRepository,
+        private WalletTransactionCollectionFactory $walletTransactionCollectionFactory,
+        private WalletTopupFactory $walletTopupFactory,
         ?AbstractResource $resource = null,
         ?AbstractDbCollection $resourceCollection = null,
         array $data = []
     ) {
-        $this->customerRepository = $customerRepository;
-        $this->walletTransactionCollectionFactory = $walletTransactionCollectionFactory;
-
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -126,5 +121,22 @@ class Wallet extends AbstractModel implements WalletInterface
             return $collection;
         }
         return null;
+    }
+
+    public function addMoney(int $amount, string $note): bool
+    {
+        if ($this->getId() && $this->getCustomerId()) {
+            $topup = $this->walletTopupFactory->create();
+            $topup
+                ->setWalletId($this->getId())
+                ->setAmount($amount)
+                ->setNote($note);
+            $topup->save();
+
+            // Recalculate the balance
+            $this->setBalance($amount + $this->getBalance());
+            $this->save();
+        }
+        return true;
     }
 }

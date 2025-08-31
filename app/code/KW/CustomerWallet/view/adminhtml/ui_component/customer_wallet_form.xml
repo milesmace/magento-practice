@@ -158,24 +158,99 @@
         </insertListing>
     </fieldset>
 
+    <!-- Add Money Modal -->
     <modal name="wallet_add_money_modal">
         <settings>
             <options>
+                <option name="title" xsi:type="string">Add Money</option>
                 <option name="buttons" xsi:type="array">
                     <item name="0" xsi:type="array">
-                        <item name="text" xsi:type="string">Done</item>
+                        <item name="text" xsi:type="string" translate="true">Save</item>
                         <item name="class" xsi:type="string">action-primary</item>
                         <item name="actions" xsi:type="array">
                             <item name="0" xsi:type="array">
-                                <item name="targetName" xsi:type="string">${ $.name }</item>
-                                <item name="actionName" xsi:type="string">actionDone</item>
+                                <item name="targetName" xsi:type="string">wallet_add_money_form.wallet_add_money_form_data_source</item>
+                                <item name="actionName" xsi:type="string">save</item>
                             </item>
                         </item>
                     </item>
+                    <item name="1" xsi:type="array">
+                        <item name="text" xsi:type="string" translate="true">Cancel</item>
+                        <item name="class" xsi:type="string">action-secondary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="string">closeModal</item>
+                        </item>
+                    </item>
                 </option>
-                <option name="title" xsi:type="string">Dolphin MODEL</option>
             </options>
-            <onCancel>actionDone</onCancel>
+            <onCancel>closeModal</onCancel>
         </settings>
+
+        <!-- DataSource -->
+        <dataSource name="wallet_add_money_form_data_source">
+            <argument name="dataProvider" xsi:type="configurableObject">
+                <argument name="class" xsi:type="string">KW\CustomerWallet\Ui\DataProvider\Wallet\Form\AddMoney\DataProvider</argument>
+                <argument name="name" xsi:type="string">wallet_add_money_form_data_source</argument>
+                <argument name="primaryFieldName" xsi:type="string">wallet_id</argument>
+                <argument name="requestFieldName" xsi:type="string">wallet_id</argument>
+            </argument>
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+                </item>
+            </argument>
+            <settings>
+                <submitUrl path="customer/wallet/addMoney"/>
+            </settings>
+        </dataSource>
+
+        <!-- Form -->
+        <form name="wallet_add_money_form">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="provider" xsi:type="string">wallet_add_money_form.wallet_add_money_form_data_source</item>
+                    <item name="deps" xsi:type="string">wallet_add_money_form.wallet_add_money_form_data_source</item>
+                    <item name="namespace" xsi:type="string">wallet_add_money_form</item>
+                </item>
+            </argument>
+
+            <fieldset name="add_money_fieldset" sortOrder="10">
+                <settings>
+                    <label/>
+                </settings>
+
+                <!-- Hidden wallet_id -->
+                <field name="wallet_id" sortOrder="5" formElement="input">
+                    <settings>
+                        <dataType>text</dataType>
+                        <dataScope>wallet_id</dataScope>
+                        <visible>false</visible>
+                    </settings>
+                </field>
+
+                <!-- Amount field -->
+                <field name="amount" sortOrder="10" formElement="input">
+                    <settings>
+                        <dataType>number</dataType>
+                        <label translate="true">Amount</label>
+                        <dataScope>amount</dataScope>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                            <rule name="validate-number" xsi:type="boolean">true</rule>
+                            <rule name="greater-than-zero" xsi:type="boolean">true</rule>
+                        </validation>
+                    </settings>
+                </field>
+
+                <!-- Note field -->
+                <field name="note" sortOrder="20" formElement="textarea">
+                    <settings>
+                        <label translate="true">Note</label>
+                        <dataType>text</dataType>
+                        <dataScope>note</dataScope>
+                    </settings>
+                </field>
+            </fieldset>
+        </form>
     </modal>
 </form>

@@ -7,7 +7,7 @@ use KW\CustomerWallet\Api\WalletRepositoryInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 
-class Save extends Action
+class AddMoney extends Action
 {
     private WalletRepositoryInterface $walletRepository;
     private WalletInterfaceFactory $walletFactory;
@@ -38,11 +38,8 @@ class Save extends Action
                 $wallet = $this->walletFactory->create();
             }
 
-            $wallet->addData($data);
-
-            //            $this->walletRepository->save($wallet);
-            $wallet->save();
-            $this->messageManager->addSuccessMessage(__('The wallet has been saved.'));
+            $wallet->addMoney($data['amount'], '');
+            $this->messageManager->addSuccessMessage(__('Successfully added money to wallet.'));
 
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('Error: %1', $e->getMessage()));

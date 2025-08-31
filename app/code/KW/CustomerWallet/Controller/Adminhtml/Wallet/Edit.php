@@ -3,34 +3,19 @@
 namespace KW\CustomerWallet\Controller\Adminhtml\Wallet;
 
 use KW\CustomerWallet\Api\WalletRepositoryInterface;
-use KW\CustomerWallet\Controller\Adminhtml\RegistryConstants;
-use Magento\Backend\App\Action;
-use Magento\Customer\Controller\RegistryConstants as CustomerRegistryConstants;
+use KW\CustomerWallet\Controller\Adminhtml\BaseController;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 
-class Edit extends Action
+class Edit extends BaseController
 {
-    protected $resultPageFactory;
-    protected $walletRepository;
-    protected $coreRegistry;
-
     public function __construct(
-        Action\Context $context,
-        PageFactory $resultPageFactory,
-        WalletRepositoryInterface $walletRepository,
-        Registry $coreRegistry
+        private Context $context,
+        private PageFactory $resultPageFactory,
+        private WalletRepositoryInterface $walletRepository,
     ) {
         parent::__construct($context);
-        $this->resultPageFactory = $resultPageFactory;
-        $this->walletRepository = $walletRepository;
-        $this->coreRegistry = $coreRegistry;
-    }
-
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('KW_CustomerWallet::wallet');
     }
 
     public function execute()
@@ -49,11 +34,6 @@ class Edit extends Action
 
         $customer = $wallet->getCustomer();
         $customerName = $customer ? $customer->getFirstname() . ' ' . $customer->getLastname() : __('Unknown Customer');
-        $customerId = $customer->getId();
-
-        // Store wallet in registry for UI component/form
-        $this->coreRegistry->register(RegistryConstants::CURRENT_WALLET, $wallet);
-        $this->coreRegistry->register(CustomerRegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

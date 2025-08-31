@@ -2,21 +2,17 @@
 
 namespace KW\CustomerWallet\Controller\Adminhtml\Wallets;
 
-use Magento\Backend\App\Action;
+use KW\CustomerWallet\Controller\Adminhtml\BaseController;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index extends Action
+class Index extends BaseController
 {
-    protected $resultPageFactory;
-
-    public const ADMIN_RESOURCE = 'KW_CustomerWallet::wallet_list';
-
     public function __construct(
-        Action\Context $context,
-        PageFactory $resultPageFactory,
+        Context $context,
+        private PageFactory $resultPageFactory,
     ) {
         parent::__construct($context);
-        $this->resultPageFactory = $resultPageFactory;
     }
 
     /**
