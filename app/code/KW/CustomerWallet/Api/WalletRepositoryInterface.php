@@ -12,4 +12,10 @@ interface WalletRepositoryInterface
      * @return Wallet | null
      */
     public function getById($walletId): ?Wallet;
+
+    /**
+     * @param int $customerId
+     * @return Wallet|null
+     */
+    public function getByCustomerId(int $customerId): ?Wallet;
 }

@@ -3,9 +3,10 @@
 namespace KW\CustomerWallet\Model;
 
 use KW\CustomerWallet\Api\Data\WalletInterface;
-use KW\CustomerWallet\Model\WalletTopupFactory;
+use KW\CustomerWallet\Api\Data\WalletTransactionInterface;
 use KW\CustomerWallet\Model\ResourceModel\WalletTransaction\Collection as WalletTransactionCollection;
 use KW\CustomerWallet\Model\ResourceModel\WalletTransaction\CollectionFactory as WalletTransactionCollectionFactory;
+use KW\CustomerWallet\Model\ResourceModel\WalletTopup\CollectionFactory as WalletTopupCollectionFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Data\Collection\AbstractDb as AbstractDbCollection;
@@ -36,6 +37,7 @@ class Wallet extends AbstractModel implements WalletInterface
         Registry $registry,
         private CustomerRepositoryInterface $customerRepository,
         private WalletTransactionCollectionFactory $walletTransactionCollectionFactory,
+        private WalletTopupCollectionFactory $walletTopupCollectionFactory,
         private WalletTopupFactory $walletTopupFactory,
         ?AbstractResource $resource = null,
         ?AbstractDbCollection $resourceCollection = null,
@@ -112,14 +114,29 @@ class Wallet extends AbstractModel implements WalletInterface
         return null;
     }
 
-    public function getTransactions(): ?WalletTransactionCollection
+    public function getTransactions(): ?array
     {
         if ($this->getId() && $this->getCustomerId()) {
             $collection = $this->walletTransactionCollectionFactory->create();
+            $collection->addFieldToFilter(
+                ['wallet_id', WalletTransactionInterface::RELATED_WALLET_ID],
+                [$this->getId(), $this->getId()]
+            );
+
+            return $collection->getItems();
+        }
+        return null;
+    }
+
+    public function getTopups(): ?array
+    {
+        if ($this->getId() && $this->getCustomerId()) {
+            $collection = $this->walletTopupCollectionFactory->create();
             $collection->addFieldToFilter('wallet_id', $this->getId());
 
-            return $collection;
+            return $collection->getItems();
         }
+
         return null;
     }
 

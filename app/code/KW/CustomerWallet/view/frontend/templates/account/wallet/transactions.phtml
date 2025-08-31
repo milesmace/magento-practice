@@ -1,0 +1,80 @@
+<?php
+/** @var \KW\CustomerWallet\Block\Account\Wallet\WalletInfo $block */
+/** @var \KW\CustomerWallet\Api\Data\WalletInterface $wallet */
+$wallet = $block->getWallet();
+$priceHelper = $block->getPriceHelper();
+$transactions = $block->getTransactions();
+?>
+
+<div class="block block-account-wallet-transactions">
+    <div class="block-title"><strong><?= $block->escapeHtml(__('Wallet Transactions')) ?></strong></div>
+
+    <?php if ($transactions && count($transactions)) : ?>
+        <div class="table-wrapper wallet-transactions-history">
+            <table class="data table table-wallet-transaction-items history" id="my-wallet-transactions-table">
+                <caption class="table-caption"><?= $block->escapeHtml(__('Wallet Topups')) ?></caption>
+                <thead>
+                <tr>
+                    <th scope="col" class="col id"><?= $block->escapeHtml(__('Transaction #')) ?></th>
+                    <th scope="col" class="col date"><?= $block->escapeHtml(__('Date')) ?></th>
+                    <th scope='col' class='col type'><?= $block->escapeHtml(__('Type')) ?></th>
+                    <th scope="col" class="col amount"><?= $block->escapeHtml(__('Amount')) ?></th>
+                    <th scope='col' class='col ref-order'><?= $block->escapeHtml(__('Ref. Order #')) ?></th>
+                    <th scope='col' class='col ref-wallet'><?= $block->escapeHtml(__('Ref. Wallet #')) ?></th>
+                    <th scope='col' class='col note'><?= $block->escapeHtml(__('Note')) ?></th>
+                    <!--                    <th scope="col" class="col actions">--><?php //= $block->escapeHtml(__('Action'))?><!--</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($transactions as $transaction) : ?>
+                    <tr>
+                        <td data-th="<?= $block->escapeHtml(__('Transaction #')) ?>" class="col id"><?= $block->escapeHtml($transaction->getId()) ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date"><?= /* @noEscape */ $block->formatDate($transaction->getCreatedAt()) ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Type')) ?>" class='col type'><?= /* @noEscape */ $transaction->getType() ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Amount')) ?>" class="col amount"><?= /* @noEscape */ $priceHelper->currency($transaction->getAmount()) ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Ref. Order #')) ?>" class='col ref-order'><?= /* @noEscape */ $transaction->getReferenceOrderId() ?? '--' ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Ref. Wallet #')) ?>" class='col ref-wallet'><?= /* @noEscape */ $transaction->getRelatedWalletId() ?? '--' ?></td>
+                        <td data-th="<?= $block->escapeHtml(__('Note')) ?>" class='col note'><?= /* @noEscape */ $transaction->getDescription() ?? '--' ?></td>
+                        <!--                        <td data-th="--><?php //= $block->escapeHtml(__('Actions'))?><!--" class="col actions">-->
+<!--                            --><?php //if ($transaction->getStatus() != 'received'):?>
+<!--                                <a href="--><?php //= $block->escapeUrl($block->getViewUrl($transaction))?><!--" class="action view">-->
+<!--                                    <span>--><?php //= $block->escapeHtml(__('View Order'))?><!--</span>-->
+<!--                                </a>-->
+<!--                                --><?php //if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($transaction->getEntityId())) :?>
+<!--                                    <a href="#" data-post='--><?php //= /* @noEscape */
+//                                    $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+//                                        ->getPostData($block->getReorderUrl($transaction))
+//?><!--' class="action order">-->
+<!--                                        <span>--><?php //= $block->escapeHtml(__('Reorder'))?><!--</span>-->
+<!--                                    </a>-->
+<!--                                --><?php //endif?>
+<!--                                --><?php //if ($viewModel->canCancel($transaction->getEntityId())):?>
+<!--                                    <a href="#" class="cancel-order"-->
+<!--                                       id="cancel-order---><?php //=/* @noEscape */ $transaction->getId()?><!--" data-mage-init='{-->
+<!--                                       "cancelOrderModal":{-->
+<!--                                           "url": "--><?php //=/* @noEscape */ $block->getBaseUrl();?><!--",-->
+<!--                                           "order_id": "--><?php //= $block->escapeHtml(__($transaction->getId()));?><!--"-->
+<!--                                       }-->
+<!--                                    }'>-->
+<!--                                        <span>--><?php //= $block->escapeHtml(__('Cancel Order'))?><!--</span>-->
+<!--                                    </a>-->
+<!--                                    --><?php //= $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")
+//                                        ->setOrder($transaction)
+//                                        ->setReasons($viewModel->getCancellationReasons($transaction->getEntityId()))
+//                                        ->setTemplate("Magento_OrderCancellationUi::cancel-order-modal.phtml")->toHtml()
+//?>
+<!--                                --><?php //endif?>
+<!--                            --><?php //endif?>
+<!--                        </td>-->
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+<!--        --><?php //if ($block->getChildHtml('pager')) :?>
+<!--            <div class="wallet-transactions-toolbar toolbar bottom">--><?php //= $block->getChildHtml('pager')?><!--</div>-->
+<!--        --><?php //endif?>
+    <?php else : ?>
+        <div class="message info empty"><span><?= $block->escapeHtml($block->getEmptyTransactionsMessage()) ?></span></div>
+    <?php endif ?>
+</div>

@@ -1,0 +1,27 @@
+<?php
+/** @var \KW\CustomerWallet\Block\Account\Wallet\WalletInfo $block */
+/** @var \KW\CustomerWallet\Api\Data\WalletInterface $wallet */
+$wallet = $block->getWallet();
+$priceHelper = $block->getPriceHelper();
+?>
+
+<div class="block block-account-wallet-info">
+    <div class="block-title"><strong><?= $block->escapeHtml(__('Wallet Information')) ?></strong></div>
+
+    <div class="block-content">
+        <div class="box box-wallet-info">
+            <div class='box-content'>
+                <table class='wallet-summary'>
+                    <tr>
+                        <td><?= $block->escapeHtml(__('Wallet Balance:')) ?></td>
+                        <td><strong><?= $priceHelper->currency($wallet->getBalance()) ?></strong></td>
+                    </tr>
+                    <tr>
+                        <td><?= $block->escapeHtml(__('Total Orders:')) ?></td>
+                        <td><strong><?= $block->getTotalOrders() ?></strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <head>
+        <title>My Wallet</title>
+    </head>
+    <body>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">My Wallet</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="KW\CustomerWallet\Block\Account\Wallet\WalletInfo" name="customer_account_wallet_info" as="info" template="KW_CustomerWallet::account/wallet/info.phtml" cacheable="false" />
+            <block class="KW\CustomerWallet\Block\Account\Wallet\WalletInfo" name="customer_account_wallet_transactions" template="KW_CustomerWallet::account/wallet/transactions.phtml" cacheable="false" />
+            <block class="KW\CustomerWallet\Block\Account\Wallet\WalletInfo" name="customer_account_wallet_topups" template="KW_CustomerWallet::account/wallet/topups.phtml" cacheable="false" />
+        </referenceContainer>
+    </body>
+</page>

@@ -25,7 +25,6 @@
     <table name="wallet_transactions" resource="default" engine="innodb" comment="Wallet Transactions">
         <column xsi:type="int" name="transaction_id" unsigned="true" nullable="false" identity="true" comment="Transaction ID"/>
         <column xsi:type="int" name="wallet_id" unsigned="true" nullable="false" comment="Wallet ID"/>
-        <column xsi:type="varchar" name="type" length="32" nullable="false" comment="Transaction Type"/>
         <column xsi:type="decimal" name="amount" scale="4" precision="12" nullable="false" comment="Transaction Amount"/>
         <column xsi:type="int" name="related_wallet_id" unsigned="true" nullable="true" comment="Related Wallet ID"/>
         <column xsi:type="int" name="order_id" unsigned="true" nullable="true" comment="Order ID"/>

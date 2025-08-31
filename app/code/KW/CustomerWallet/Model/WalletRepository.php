@@ -14,7 +14,6 @@ class WalletRepository implements WalletRepositoryInterface
     public function __construct(
         private WalletResource $walletResource,
         private WalletFactory $walletFactory,
-        private WalletTransactionCollectionFactory $walletTransactionCollectionFactory,
     ) {
     }
 
@@ -25,6 +24,14 @@ class WalletRepository implements WalletRepositoryInterface
     {
         $wallet = $this->walletFactory->create();
         $this->walletResource->load($wallet, $walletId, 'wallet_id');
+
+        return $wallet->getId() ? $wallet : null;
+    }
+
+    public function getByCustomerId(int $customerId): ?Wallet
+    {
+        $wallet = $this->walletFactory->create();
+        $this->walletResource->load($wallet, $customerId, WalletInterface::CUSTOMER_ID);
 
         return $wallet->getId() ? $wallet : null;
     }
