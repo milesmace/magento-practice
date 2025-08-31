@@ -4,7 +4,7 @@
 $wallet = $block->getWallet();
 $priceHelper = $block->getPriceHelper();
 $transactions = $block->getTransactions();
-$topups = $wallet->getTopups();
+$topups = $block->getTopups();
 ?>
 
 <div class="block block-account-wallet-info">
@@ -23,6 +23,12 @@ $topups = $wallet->getTopups();
                         <td><strong><?= $block->getWalletTotalOrders() ?></strong></td>
                     </tr>
                 </table>
+            </div>
+            <div class="box-actions">
+                <a href="<?= $block->getTransferLink() ?>">
+                    <?= $block->escapeHtml(__('Transfer Money')) ?></a> <?= $block->escapeHtml(
+                        __('to another wallet')
+                    ) ?>
             </div>
         </div>
     </div>
@@ -58,21 +64,21 @@ $topups = $wallet->getTopups();
                 foreach ($transactions as $transaction) : ?>
                     <tr>
                         <td data-th="<?= $block->escapehtml(__('transaction #')) ?>"
-                            class="col id"><?= $block->escapehtml($transaction->getid()) ?></td>
+                            class="col id"><?= $block->escapehtml($transaction->getId()) ?></td>
                         <td data-th="<?= $block->escapehtml(__('date')) ?>" class="col date"><?= /* @noescape */
-                            $block->formatdate($transaction->getcreatedat()) ?></td>
+                            $block->formatdate($transaction->getCreatedAt()) ?></td>
                         <td data-th="<?= $block->escapehtml(__('type')) ?>" class='col type'><?= /* @noescape */
-                            $transaction->gettype() ?></td>
+                            $transaction->getType() ?></td>
                         <td data-th="<?= $block->escapehtml(__('amount')) ?>" class="col amount"><?= /* @noescape */
-                            $priceHelper->currency($transaction->getamount()) ?></td>
+                            $priceHelper->currency($transaction->getAmount()) ?></td>
                         <td data-th="<?= $block->escapehtml(__('ref. order #')) ?>"
                             class='col ref-order'><?= /* @noescape */
-                                $transaction->getreferenceorderid() ?? '--' ?></td>
+                                $transaction->getReferenceOrderId() ?? '--' ?></td>
                         <td data-th="<?= $block->escapehtml(__('ref. wallet #')) ?>"
                             class='col ref-wallet'><?= /* @noescape */
-                                $transaction->getrelatedwalletid() ?? '--' ?></td>
+                                $transaction->getRelatedWalletId() ?? '--' ?></td>
                         <td data-th="<?= $block->escapehtml(__('note')) ?>" class='col note'><?= /* @noescape */
-                                $transaction->getdescription() ?? '--' ?></td>
+                                $transaction->getDescription() ?? '--' ?></td>
                         <!--                        <td data-th="--><?php
                         //= $block->escapehtml(__('actions'))?><!--" class="col actions">-->
                         <!--                            --><?php
@@ -132,8 +138,7 @@ $topups = $wallet->getTopups();
         //= $block->getchildhtml('pager')?><!--</div>-->
         <!--        --><?php
         //endif?>
-    <?php
-    else : ?>
+    <?php else : ?>
         <div class="message info empty"><span><?= $block->escapehtml($block->getemptytransactionsmessage()) ?></span>
         </div>
     <?php
@@ -165,14 +170,14 @@ $topups = $wallet->getTopups();
                 foreach ($topups as $topup) : ?>
                     <tr>
                         <td data-th="<?= $block->escapeHtml(__('Topup #')) ?>" class="col id"><?= $block->escapeHtml(
-                                $topup->getId()
-                            ) ?></td>
+                            $topup->getId()
+                        ) ?></td>
                         <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date"><?= /* @noEscape */
-                            $block->formatDate($topup->getCreatedAt()) ?></td>
+                        $block->formatDate($topup->getCreatedAt()) ?></td>
                         <td data-th="<?= $block->escapeHtml(__('Amount')) ?>" class="col total"><?= /* @noEscape */
-                            $priceHelper->currency($topup->getAmount()) ?></td>
+                        $priceHelper->currency($topup->getAmount()) ?></td>
                         <td data-th="<?= $block->escapeHtml(__('Note')) ?>" class='col note'><?= /* @noEscape */
-                                $topup->getNote() ?? '--' ?></td>
+                            $topup->getNote() ?? '--' ?></td>
                         <!--                        <td data-th="--><?php
                         //= $block->escapeHtml(__('Actions'))?><!--" class="col actions">-->
                         <!--                            --><?php
@@ -232,8 +237,7 @@ $topups = $wallet->getTopups();
         //= $block->getChildHtml('pager')?><!--</div>-->
         <!--        --><?php
         //endif?>
-    <?php
-    else : ?>
+    <?php else : ?>
         <div class="message info empty"><span><?= $block->escapeHtml($block->getEmptyTopupsMessage()) ?></span></div>
     <?php
     endif ?>

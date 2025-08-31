@@ -18,4 +18,11 @@ interface WalletRepositoryInterface
      * @return Wallet|null
      */
     public function getByCustomerId(int $customerId): ?Wallet;
+
+
+    /**
+     * @param string $publicHash
+     * @return Wallet|null
+     */
+    public function getByPublicHash(string $publicHash): ?Wallet;
 }

@@ -26,7 +26,7 @@ class SetUniqueTransactionId implements ObserverInterface
         $transaction = $observer->getEvent()->getDataObject();
 
         if ($transaction->isObjectNew()) {
-            $transaction->setTid('T' . $this->dateTime->formatDate('YmdHis') . $this->random->getRandomString(8));
+            $transaction->setTid('T' . $this->dateTime->gmDate('YmdHis', time()) . $this->random->getRandomString(8));
         }
     }
 }

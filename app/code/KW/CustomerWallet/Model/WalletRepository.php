@@ -36,6 +36,14 @@ class WalletRepository implements WalletRepositoryInterface
         return $wallet->getId() ? $wallet : null;
     }
 
+    public function getByPublicHash(string $publicHash): ?Wallet
+    {
+        $wallet = $this->walletFactory->create();
+        $this->walletResource->load($wallet, $publicHash, WalletInterface::PUBLIC_HASH);
+
+        return $wallet->getId() ? $wallet : null;
+    }
+
     public function save(WalletInterface $wallet): ?WalletInterface
     {
         $this->walletResource->save($wallet);

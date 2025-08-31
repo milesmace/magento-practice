@@ -47,6 +47,11 @@ class WalletInfo extends Template
         return 'Nan';
     }
 
+    public function getTransferLink(): string
+    {
+        return $this->getUrl('customer/wallet/transfer');
+    }
+
     public function getWalletTotalOrders(): string
     {
         $wallet = $this->getWallet();
@@ -68,6 +73,9 @@ class WalletInfo extends Template
         $transactions = $this->walletService->getWalletTransactions($walletId);
         foreach ($transactions as $transaction) {
             $transaction['type'] = $transaction->getWalletId() == $walletId ? __('Debit') : __('Credit');
+            if ($transaction->getRelatedWalletId() == $walletId) {
+                $transaction['related_wallet_id'] = $transaction->getWalletId();
+            }
         }
 
         return $transactions->getItems();
