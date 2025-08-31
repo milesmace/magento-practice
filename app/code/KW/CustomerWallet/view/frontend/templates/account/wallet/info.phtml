@@ -64,7 +64,7 @@ $topups = $block->getTopups();
                 foreach ($transactions as $transaction) : ?>
                     <tr>
                         <td data-th="<?= $block->escapehtml(__('transaction #')) ?>"
-                            class="col id"><?= $block->escapehtml($transaction->getId()) ?></td>
+                            class="col id"><?= $block->escapehtml($transaction->getTId()) ?></td>
                         <td data-th="<?= $block->escapehtml(__('date')) ?>" class="col date"><?= /* @noescape */
                             $block->formatdate($transaction->getCreatedAt()) ?></td>
                         <td data-th="<?= $block->escapehtml(__('type')) ?>" class='col type'><?= /* @noescape */
