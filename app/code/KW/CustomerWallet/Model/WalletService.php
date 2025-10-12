@@ -5,8 +5,8 @@ namespace KW\CustomerWallet\Model;
 use KW\CustomerWallet\Api\Data\WalletInterface;
 use KW\CustomerWallet\Api\Data\WalletTransactionInterface;
 use KW\CustomerWallet\Api\WalletRepositoryInterface;
-use KW\CustomerWallet\Model\ResourceModel\WalletTopup\CollectionFactory as WalletTopupCollectionFactory;
 use KW\CustomerWallet\Model\ResourceModel\WalletTopup\Collection as WalletTopupCollection;
+use KW\CustomerWallet\Model\ResourceModel\WalletTopup\CollectionFactory as WalletTopupCollectionFactory;
 use KW\CustomerWallet\Model\ResourceModel\WalletTransaction\Collection as WalletTransactionCollection;
 use KW\CustomerWallet\Model\ResourceModel\WalletTransaction\CollectionFactory as WalletTransactionCollectionFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -71,7 +71,10 @@ class WalletService
     private function sendWalletWelcomeCreditEmail($customerId): void
     {
         $storeId = $this->storeManager->getStore()->getStoreId();
-        $welcomeCredit = $this->scopeConfig->getValue(self::XML_PATH_WELCOME_CREDIT_AMOUNT, ScopeInterface::SCOPE_WEBSITE);
+        $welcomeCredit = $this->scopeConfig->getValue(
+            self::XML_PATH_WELCOME_CREDIT_AMOUNT,
+            ScopeInterface::SCOPE_WEBSITE
+        );
 
         $customer = $this->customerRepository->getById($customerId);
         $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();
@@ -79,13 +82,17 @@ class WalletService
         $this->transportBuilder
             ->setTemplateIdentifier('wallet_welcome_credit')
             ->setTemplateOptions(['area' => 'frontend', 'store' => $storeId])
-            ->setTemplateVars([ 'customer_name' => $customerName, 'credit_amount' => $welcomeCredit ])
+            ->setTemplateVars(
+                [
+                    'customer_name' => $customerName,
+                    'credit_amount' => $welcomeCredit,
+                ]
+            )
             ->setFromByScope('general', $storeId)
             ->addTo($customer->getEmail(), $customerName)
             ->getTransport()
             ->sendMessage();
     }
-
 
     /**
      * @param int $walletId
@@ -137,15 +144,21 @@ class WalletService
      */
     public function setupWalletForCustomer(int $customerId): WalletInterface
     {
-        $welcomeCreditEnabled = $this->scopeConfig->isSetFlag(self::XML_PATH_WELCOME_CREDIT_ENABLED, ScopeInterface::SCOPE_WEBSITE);
-        $welcomeCredit = $this->scopeConfig->getValue(self::XML_PATH_WELCOME_CREDIT_AMOUNT, ScopeInterface::SCOPE_WEBSITE);
+        $welcomeCreditEnabled = $this->scopeConfig->isSetFlag(
+            self::XML_PATH_WELCOME_CREDIT_ENABLED,
+            ScopeInterface::SCOPE_WEBSITE
+        );
+        $welcomeCredit = $this->scopeConfig->getValue(
+            self::XML_PATH_WELCOME_CREDIT_AMOUNT,
+            ScopeInterface::SCOPE_WEBSITE
+        );
 
         // Create a new wallet
         /** @var WalletInterface $wallet */
         $wallet = $this->walletFactory->create();
         $wallet
             ->setCustomerId($customerId)
-            ->setBalance(0)
+            ->setBalance(0.00)
             ->setIsActive(1);
 
         if ($welcomeCreditEnabled && $welcomeCredit != 0) {
@@ -171,8 +184,11 @@ class WalletService
      * @return bool
      * @throws \Exception
      */
-    public function addFundsToWallet(int $walletId, float $amount, string $msg = ''): bool
-    {
+    public function addFundsToWallet(
+        int $walletId,
+        float $amount,
+        string $msg = ''
+    ): bool {
         $wallet = $this->walletRepository->getById($walletId);
 
         if ($wallet->getId() && $wallet->getCustomerId()) {

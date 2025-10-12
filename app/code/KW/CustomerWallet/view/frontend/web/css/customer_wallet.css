@@ -12,3 +12,56 @@
     z-index: 100;
     inset: 0;
 }
+
+.wallet-actions {
+    display: flex;
+    gap: 2rem;
+}
+
+.btn {
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+.btn:hover {
+    text-decoration: none;
+}
+
+.btn.primary {
+    color: white;
+    background-color: #0a6aa1;
+    border-color: transparent;
+}
+.btn.primary:hover {
+    background-color: #0f5293;
+}
+
+.btn.secondary {
+    color: white;
+    background-color: #3d3d3d;
+    border-color: transparent;
+}
+.btn.secondary:hover {
+    background-color: #2a2a2a;
+}
+
+.wallet-type-label {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.wallet-type-credit {
+    background-color: #e6f7e6;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.wallet-type-debit {
+    background-color: #fdecea;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}

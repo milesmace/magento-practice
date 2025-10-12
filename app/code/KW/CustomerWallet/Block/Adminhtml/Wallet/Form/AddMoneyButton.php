@@ -18,10 +18,10 @@ class AddMoneyButton implements ButtonProviderInterface
     {
         return [
             'label' => __('Add Money'),
-            'class' => 'action-secondary',
+            'class' => 'add action-secondary',
             'data_attribute' => [
                 'mage-init' => [
-                    'Magento_Ui/js/form/button-adapter' => [
+                    'buttonAdapter' => [
                         'actions' => [
                             [
                                 'targetName' => 'customer_wallet_form.customer_wallet_form.wallet_add_money_modal',
@@ -31,23 +31,7 @@ class AddMoneyButton implements ButtonProviderInterface
                     ]
                 ]
             ],
-            'on_click' => '',
             'sort_order' => 10
-        ];
-        return [
-            'label' => __('Add Money'),
-            'class' => 'add action-secondary',
-            'data_attribute' => [
-                'mage-init' => [
-                    'Magento_Ui/js/form/button-adapter' => [
-                        'actions' => [[
-                            'targetName' => 'customer_wallet_form.customer_wallet_form.wallet_add_money_modal',
-                            'actionName' => 'openModal'
-                        ]]
-                    ]
-                ]
-            ],
-            'on_click' => '',
         ];
     }
 }

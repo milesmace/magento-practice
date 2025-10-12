@@ -8,6 +8,7 @@ use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Controller\Result\Redirect;
 
 class TransferPost extends Action
 {
@@ -15,48 +16,90 @@ class TransferPost extends Action
         Context $context,
         private CurrentCustomer $currentCustomer,
         private WalletRepositoryInterface $walletRepository,
-        private WalletService $walletService,
+        private WalletService $walletService
     ) {
         parent::__construct($context);
     }
 
     /**
-     * @inheritDoc
+     * Execute wallet transfer
      */
-    public function execute()
+    public function execute(): Redirect
     {
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+
         if (!$this->getRequest()->isPost()) {
-            throw new LocalizedException(__('Request method is not allowed.'));
+            $this->messageManager->addErrorMessage(
+                __('Request method is not allowed.')
+            );
+            return $resultRedirect->setPath('*/*/transfer');
         }
 
         $customerId = $this->currentCustomer->getCustomerId();
-        $wallet = $this->walletRepository->getByCustomerId($customerId);
-
-        if (!$wallet) {
-            $this->messageManager->addErrorMessage(__('No wallet associated with the current user.'));
-            return $this->_redirect('customer/account/index');
-        }
-
-        $data = $this->getRequest()->getPostValue();
-
-        $receiverWallet = $this->walletRepository->getByPublicHash($data['receiver_public_hash']);
-        if (!$receiverWallet) {
-            $this->messageManager->addErrorMessage(__('No wallet found with the given public hash.'));
-        }
 
         try {
+            $wallet = $this->walletRepository->getByCustomerId($customerId);
+            if (!$wallet) {
+                throw new LocalizedException(
+                    __('No wallet associated with your account.')
+                );
+            }
+
+            $data = $this->getRequest()->getPostValue();
+            $amount = isset($data['amount']) ? (float)$data['amount'] : 0;
+            $note = $data['note'] ?? '';
+            $receiverHash = $data['receiver_public_hash'] ?? null;
+
+            if (!$receiverHash) {
+                throw new LocalizedException(
+                    __('Receiver wallet public hash is required.')
+                );
+            }
+
+            $receiverWallet = $this->walletRepository->getByPublicHash(
+                $receiverHash
+            );
+            if (!$receiverWallet) {
+                throw new LocalizedException(
+                    __('No wallet found with the given public hash.')
+                );
+            }
+
+            if (!$receiverWallet->getIsActive()) {
+                throw new LocalizedException(
+                    __('Receiver wallet is disabled.')
+                );
+            }
+
+            if ($amount <= 0) {
+                throw new LocalizedException(
+                    __('Amount must be greater than zero.')
+                );
+            }
+
+            // Perform the transfer
             $this->walletService->transfer(
                 $wallet->getId(),
                 $receiverWallet->getId(),
-                (float)$data['amount'],
-                $data['note']
+                $amount,
+                $note
             );
+
+            $this->messageManager->addSuccessMessage(
+                __('Wallet transfer completed successfully.')
+            );
+
+            return $resultRedirect->setPath('customer/wallet/index');
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-            return $this->_redirect('*/*/transfer');
+        } catch (\Exception $e) {
+            // Catch any unexpected exception
+            $this->messageManager->addErrorMessage(
+                __('Something went wrong during the transfer.')
+            );
         }
 
-        $this->messageManager->addSuccessMessage(__('Wallet money transfer complete.'));
-        return $this->_redirect('customer/wallet/index');
+        return $resultRedirect->setPath('*/*/transfer');
     }
 }

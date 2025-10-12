@@ -384,6 +384,8 @@ return [
         'PayPal_BraintreeGiftCardAccount' => 1,
         'PayPal_BraintreeGiftWrapping' => 1,
         'PayPal_BraintreeGraphQl' => 1,
-        'PayPal_BraintreeReward' => 1
+        'PayPal_BraintreeReward' => 1,
+        'StripeIntegration_Tax' => 1,
+        'StripeIntegration_Payments' => 1
     ]
 ];

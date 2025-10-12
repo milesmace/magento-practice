@@ -11,6 +11,8 @@ use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
 class WalletInfo extends Template
 {
+    public const string TRANSACTION_TYPE_CREDIT = 'credit';
+    public const string TRANSACTION_TYPE_DEBIT = 'debit';
 
     private WalletInterface|null $_wallet = null;
 
@@ -52,6 +54,11 @@ class WalletInfo extends Template
         return $this->getUrl('customer/wallet/transfer');
     }
 
+    public function getAddMoneyLink(): string
+    {
+        return $this->getUrl('customer/wallet/topup');
+    }
+
     public function getWalletTotalOrders(): string
     {
         $wallet = $this->getWallet();
@@ -72,10 +79,16 @@ class WalletInfo extends Template
 
         $transactions = $this->walletService->getWalletTransactions($walletId);
         foreach ($transactions as $transaction) {
-            $transaction['type'] = $transaction->getWalletId() == $walletId ? __('Debit') : __('Credit');
+            $transaction['type'] = $transaction->getWalletId() == $walletId
+                ? self::TRANSACTION_TYPE_DEBIT
+                : self::TRANSACTION_TYPE_CREDIT;
+
             if ($transaction->getRelatedWalletId() == $walletId) {
-                $transaction['related_wallet_id'] = $transaction->getWalletId();
+                $wallet = $this->walletRepository->getById($transaction->getWalletId());
+            } else {
+                $wallet = $this->walletRepository->getById($transaction->getRelatedWalletId());
             }
+            $transaction['related_wallet_id'] = $wallet->getPublicHash();
         }
 
         return $transactions->getItems();

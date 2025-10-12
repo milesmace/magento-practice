@@ -1,37 +1,18 @@
 <?php
-/** @var \KW\CustomerWallet\Block\Account\Wallet\WalletTransfer $block */
+/** @var \KW\CustomerWallet\Block\Account\Wallet\WalletTopup $block */
 ?>
 
-<div class='block block-wallet-transfer'>
-    <div class='block-content'>
-        <form class='form form-wallet-transfer'
+<div class="block block-wallet-topup">
+    <div class="block-content">
+        <form class="form form-wallet-topup"
               action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>"
               method='post'
-              id='wallet-transfer-form'
-              data-mage-init='{"validation":{}}'>
+              id='wallet-topup-form'
+              data-mage-init='{"validation":{}, "Magento_Ui/js/form/loader": {}}'>
 
             <?= $block->getBlockHtml('formkey'); ?>
 
-            <fieldset class="fieldset info">
-                <!-- Receiver Public Hash -->
-                <div class="field required">
-                    <label class="label" for="receiver_public_hash">
-                        <span><?= __('Receiver Public Hash') ?></span>
-                    </label>
-                    <div class="control">
-                        <input type="text"
-                               name="receiver_public_hash"
-                               id="receiver_public_hash"
-                               value=""
-                               title="<?= __('Receiver Public Hash') ?>"
-                               class="input-text"
-                               data-validate="{required:true}" />
-                        <div class="note">
-                            <?= __('Please make sure the hash is correct. Transfers cannot be reversed once processed.') ?>
-                        </div>
-                    </div>
-                </div>
-
+            <fieldset class='fieldset info'>
                 <!-- Amount -->
                 <div class='field required'>
                     <label class='label' for='amount'>
@@ -48,7 +29,7 @@
                                class="input-text"
                                data-validate="{required:true, 'validate-number':true, 'greater-than-zero':true}"/>
                         <div class="note">
-                            <?= __('Enter the amount to transfer (decimals allowed).') ?>
+                            <?= __('Enter the amount to add to your wallet (decimals allowed).') ?>
                         </div>
                     </div>
                 </div>
@@ -72,7 +53,7 @@
                 <div class="primary">
                     <button type="submit"
                             class="action save primary">
-                        <span><?= __('Transfer Money') ?></span>
+                        <span><?= __('Add Money') ?></span>
                     </button>
                 </div>
             </div>
